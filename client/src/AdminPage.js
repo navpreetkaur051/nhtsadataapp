@@ -39,8 +39,7 @@ const AdminPage = () => {
   const handleLogout = (e) => {
     window.open(path + "auth/logout", "_self");
   };
-  
-
+  //here  login//success
   return (
     <Fragment>
     <Segment>
