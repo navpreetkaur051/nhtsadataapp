@@ -77,14 +77,17 @@ app.use("/auth", authRoutes);
 
 //control route
 app.post("/adminctrlset", (req, res) => {
-    let ctl = req.body;
-  console.log(ctl);
-  control.create(ctl, (error, doc) => {
-    if(error) {
-      console.log(error)
+  
+  let typ = req.body.dvw;
+  var myquery = { doc: "1" };
+  var newvalues = { $set: {vw:typ} };
+  control.updateOne(myquery, newvalues, (error,data) => {
+    if (error) {
+      console.log(error);
     }
-    res.send("updated successfully")
-  })
+    res.send("updated successfully");
   });
+
+});
 
 app.listen(PORT, () => console.log(`Server is starting at ${PORT}`));

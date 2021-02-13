@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {Fragment, useState,useEffect,useContext} from "react";
 import { Segment, Form, Button, Header } from "semantic-ui-react";
 import Axios from "axios";
 /**
@@ -8,20 +8,21 @@ import Axios from "axios";
 
 let path = "/"
 if(process.env.NODE_ENV !== "production"){
-  path = "https://localhost:8080/"
+  path = "http://localhost:8080/"
 }
 const AdminPage = () => {
- 
-  //const { userInfo, setUserInfo } = useContext(UserContext);
-//fetch value from db initially
-  const [viewsolval, setviewSolValue] = useState(false);
+
+  const [viewsolval, setviewSolValue] = useState();
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
     
-    Axios.post(path+"adminctrlset", viewsolval)
+    const testdata = {
+      dvw: viewsolval,
+    };
+    Axios.post(path+"adminctrlset", testdata)
       .then((res) => {
-        if (res.data.message === "updated successfully") {
+        if (res.data === "updated successfully") {
             alert("Your data is updated!");
         }
       })
@@ -31,10 +32,17 @@ const AdminPage = () => {
   };
 
   const handleFormChange = (e) => {
-    setviewSolValue(e.target.value)
+    setviewSolValue(e.target.value === 'true' ? true: false)
+  };
+
+
+  const handleLogout = (e) => {
+    window.open(path + "auth/logout", "_self");
   };
   
+
   return (
+    <Fragment>
     <Segment>
       <Header as="h2">
         <Header.Content>View Solutions set Form</Header.Content>
@@ -43,8 +51,8 @@ const AdminPage = () => {
         <Form.Field>
           <label>View Solution available to students?</label>
           <div onChange={handleFormChange}>
-            <input type="radio" value="True" name="viewsol" /> Yes
-            <input type="radio" value="False" name="viewsol" /> No
+            <input type="radio" value='true' name="viewsol" /> Yes
+            <input type="radio" value='false' name="viewsol" /> No
           </div>
         </Form.Field>
         <Button positive type="submit" >
@@ -52,6 +60,16 @@ const AdminPage = () => {
         </Button>
       </Form>
     </Segment>
+    <Segment>
+      <Header as="h2">
+        <Header.Content>Signout to exit</Header.Content>
+      </Header>
+        
+        <Button positive type="submit" onClick={handleLogout}>
+         Logout
+        </Button>
+    </Segment>
+    </Fragment>
   );
 };
 

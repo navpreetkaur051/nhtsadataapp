@@ -26,7 +26,7 @@ passport.use(
     {
       clientID: process.env.googleClientID,
       clientSecret: process.env.googleClientSecret,
-      callbackURL: path + "auth/login/callback",
+      callbackURL: path + "auth/google/callback",
     },
     (accessToken, refreshToken, profile, done) => {
       const { sub: googleId, name, email, picture, hd } = profile._json;

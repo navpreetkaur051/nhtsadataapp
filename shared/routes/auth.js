@@ -10,7 +10,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 router.get(
-  "/login",
+  "/google",
   passport.authenticate("google", {
     scope: ["profile", "email"],
     prompt: "select_account",
@@ -21,7 +21,7 @@ router.get(
 );
 
 router.get(
-  "/login/callback",
+  "/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/auth/failed",
     successRedirect: path,
