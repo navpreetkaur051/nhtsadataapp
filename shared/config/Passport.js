@@ -1,4 +1,5 @@
 const passport = require("passport");
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const OIDCStrategy  = require("passport-azure-ad").OIDCStrategy;
 const User = require("../model/adminModel");
 require("dotenv").config();
@@ -19,6 +20,47 @@ passport.serializeUser((req, user, done) => {
 passport.deserializeUser((user, done) => {
   done(null, user);
 });
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.googleClientID,
+      clientSecret: process.env.googleClientSecret,
+      callbackURL: path + "auth/login/callback",
+    },
+    (accessToken, refreshToken, profile, done) => {
+      const { sub: googleId, name, email, picture, hd } = profile._json;
+
+      // check the email is admin or not
+      const adminEmail = process.env.adminemail;
+      if (email == adminEmail && hd && hd == "uottawa.ca") {
+        const newUser = new User({
+          googleId: googleId,
+          name: name,
+          email: email,
+          admin: true,
+        });
+
+        // Check if database has already had this user
+        User.findOneAndUpdate({ googleId: googleId }, { admin: true }).then(
+          (currentUser) => {
+            // if it has, don't save
+            if (currentUser) {
+              done(null, currentUser);
+            } else {
+              // if it does not, save the new user
+              newUser.save().then((newUser) => {
+                done(null, newUser);
+              });
+            }
+          }
+        );
+      } else {
+        done(new Error("Invaild host domain!"));
+      }
+    }
+  )
+);
 
 passport.use(
   new OIDCStrategy (

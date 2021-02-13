@@ -9,7 +9,25 @@ if (process.env.NODE_ENV !== "production") {
   path = "http://localhost:3000";
 }
 
+router.get(
+  "/login",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    prompt: "select_account",
+  }),
+  (req, res) => {
+    console.log("come in to login");
+  }
+);
 
+router.get(
+  "/login/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/auth/failed",
+    successRedirect: path,
+    failureFlash: true,
+  })
+);
 router.get("/failed", (req, res) => {
   res.send("Your account is not valid!");
 });

@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const adminSchema = new Schema({
   outlookId: String,
+  googleId:String,
   name: String,
   email: String,
   admin: Boolean
