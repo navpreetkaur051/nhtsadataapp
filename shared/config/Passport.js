@@ -1,6 +1,6 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const OIDCStrategy  = require("passport-azure-ad").OIDCStrategy;
+//const OIDCStrategy  = require("passport-azure-ad").OIDCStrategy;
 const User = require("../model/adminModel");
 require("dotenv").config();
 
@@ -33,7 +33,7 @@ passport.use(
 
       // check the email is admin or not
       const adminEmail = process.env.adminemail;
-      if (email == adminEmail && hd && hd == "uottawa.ca") {
+      if (email === adminEmail && hd && hd === "uottawa.ca") {
         const newUser = new User({
           googleId: googleId,
           name: name,

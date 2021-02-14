@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const passport = require("passport");
+require("dotenv").config();
 let user = {};
 
 // for deploy
@@ -33,7 +34,7 @@ router.get("/failed", (req, res) => {
 });
 
 router.get("/login/success", (req, res) => {
-  if (req.user !== undefined) {
+  if (req.user !== undefined  && req.user.email ===  process.env.adminemail) {
     res.json({
       authenticated: true,
       user: req.user,
