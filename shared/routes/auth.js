@@ -6,7 +6,7 @@ let user = {};
 let path = "/";
 if (process.env.NODE_ENV !== "production") {
   //for local setup
-  path = "http://localhost:3000";
+  path = "http://localhost:3000/#";
 }
 
 router.get(
@@ -24,7 +24,7 @@ router.get(
   "/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/auth/failed",
-    successRedirect: path,
+    successRedirect: path ,
     failureFlash: true,
   })
 );

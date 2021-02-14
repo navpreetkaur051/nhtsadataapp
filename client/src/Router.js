@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Switch, Route } from "react-router-dom";
-import login from "./login";
+//import login from "./Login";
 import admin from "./AdminPage";
 import { Container } from "semantic-ui-react";
 
@@ -16,7 +16,7 @@ const Routers = () => {
       <Switch>
         <Fragment>
           <Container className="main">
-            <Route exact path="/login" component={login} />
+            {/* <Route exact path="/" component={login} /> */}
             <Route exact path="/" component={admin} />
           </Container>
         </Fragment>

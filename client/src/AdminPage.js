@@ -1,5 +1,5 @@
 import React, {Fragment, useState,useEffect,useContext} from "react";
-import { Segment, Form, Button, Header } from "semantic-ui-react";
+import { Segment, Form, Button, Header,Grid } from "semantic-ui-react";
 import Axios from "axios";
 import { UserContext } from "./UserProvider";
 import useReactRouter from "use-react-router";
@@ -16,7 +16,7 @@ const AdminPage = () => {
 
   const { userInfo, setUserInfo } = useContext(UserContext);
   const { history } = useReactRouter();
-  const [viewsolval, setviewSolValue] = useState();
+  const [viewsolval, setviewSolValue] = useState(false);
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -43,29 +43,40 @@ const AdminPage = () => {
   const handleLogout = (e) => {
     window.open(path + "auth/logout", "_self");
   };
-  //here  login//success
+  
+   // const handleOutlookLogin = () => {
+  //   window.open(path+"auth/outlook", "_self")
+  // }
+  const handleGoogleLogin = () => {
+    window.open(path+"auth/google", "_self")
+  }
   useEffect(() => {
-  Axios.get(path + "auth/login/success", {
-    withCredentials: true,
-  })
-    .then((res) => {
-      return res.data;
-    })
-    .then((data) => {
-      setUserInfo({
-        ...userInfo,
-        user: data.user,
-        authenticated: data.authenticated,
-      }   
-      );
-    }
-    )
-    .catch((e) => {
-      console.log(e);
-    });
-  });
-  console.log("user:::::",userInfo);
-  if (userInfo.authenticated) {
+    const fetchUser = ()=>{
+            Axios.get(path + "auth/login/success", {
+              withCredentials: true,
+            })
+              .then((res) => {
+                return res.data;
+              })
+              .then((data) => {
+                setUserInfo({
+                  ...userInfo,
+                  user: data.user,
+                  authenticated: data.authenticated,
+                }   
+                );
+              }
+              )
+              .catch((e) => {
+                console.log(e);
+              });
+      }
+      fetchUser();
+  },[null]);
+
+   console.log("user:::::",userInfo);
+ if (userInfo.authenticated) {
+   console.log("admhere111");
   return (
     <Fragment>
     <Segment>
@@ -77,7 +88,7 @@ const AdminPage = () => {
           <label>View Solution available to students?</label>
           <div onChange={handleFormChange}>
             <input type="radio" value='true' name="viewsol" /> Yes
-            <input type="radio" value='false' name="viewsol" /> No
+            <input type="radio" value='false' name="viewsol" checked/> No
           </div>
         </Form.Field>
         <Button positive type="submit" >
@@ -96,10 +107,23 @@ const AdminPage = () => {
     </Segment>
     </Fragment>
   );
-  }
+ }
   else{
-    history.push("/login");
-    return null;
+    return (
+      <Fragment>
+        <Grid columns={2} stackable textAlign="center">
+        <Grid.Row>
+            <h2>If you are a admin, please log in with your UOttawa account</h2>
+            {/* <Button onClick={handleOutlookLogin}>
+              Sign in with Outlook
+            </Button> */}
+            <Button onClick={handleGoogleLogin}>
+              Sign in with Google
+            </Button>
+          </Grid.Row>
+        </Grid>
+      </Fragment>
+    );
   }
 };
 
