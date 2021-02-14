@@ -1,6 +1,8 @@
 import React, {Fragment, useState,useEffect,useContext} from "react";
 import { Segment, Form, Button, Header } from "semantic-ui-react";
 import Axios from "axios";
+import { UserContext } from "./UserProvider";
+import useReactRouter from "use-react-router";
 /**
  * @author @navpreet
  * @description admin page
@@ -12,6 +14,8 @@ if(process.env.NODE_ENV !== "production"){
 }
 const AdminPage = () => {
 
+  const { userInfo, setUserInfo } = useContext(UserContext);
+  const { history } = useReactRouter();
   const [viewsolval, setviewSolValue] = useState();
 
   const handleFormSubmit = (event) => {
@@ -40,6 +44,28 @@ const AdminPage = () => {
     window.open(path + "auth/logout", "_self");
   };
   //here  login//success
+  useEffect(() => {
+  Axios.get(path + "auth/login/success", {
+    withCredentials: true,
+  })
+    .then((res) => {
+      return res.data;
+    })
+    .then((data) => {
+      setUserInfo({
+        ...userInfo,
+        user: data.user,
+        authenticated: data.authenticated,
+      }   
+      );
+    }
+    )
+    .catch((e) => {
+      console.log(e);
+    });
+  });
+  console.log("user:::::",userInfo);
+  if (userInfo.authenticated) {
   return (
     <Fragment>
     <Segment>
@@ -70,6 +96,11 @@ const AdminPage = () => {
     </Segment>
     </Fragment>
   );
+  }
+  else{
+    history.push("/login");
+    return null;
+  }
 };
 
 export default AdminPage;

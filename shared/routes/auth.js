@@ -34,7 +34,6 @@ router.get("/failed", (req, res) => {
 
 router.get("/login/success", (req, res) => {
   if (req.user !== undefined) {
-    //check for admin
     res.json({
       authenticated: true,
       user: req.user,
@@ -56,19 +55,18 @@ router.get("/logout", (req, res) => {
   res.redirect(path);
 });
 
-//outlook
-router.get('/outlook', 
-  passport.authenticate('azuread-openidconnect', { failureRedirect: '/auth/failed' }),
-  function(req, res) {
-    console.log('Login outlook was called');
-    res.redirect(path);
-});
+// //outlook
+// router.get('/outlook', 
+//   passport.authenticate('azuread-openidconnect', { failureRedirect: '/auth/failed' }),
+//   function(req, res) {
+//     res.redirect(path);
+// });
  
-router.post('/outlook/callback',
-  passport.authenticate('azuread-openidconnect', { failureRedirect: '/auth/failed' }),
-  function(req, res) { 
-    res.redirect(path);
-  });
+// router.post('/outlook/callback',
+//   passport.authenticate('azuread-openidconnect', { failureRedirect: '/auth/failed' }),
+//   function(req, res) { 
+//     res.redirect(path);
+//   });
  
 
 module.exports = router;

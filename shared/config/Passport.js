@@ -62,63 +62,63 @@ passport.use(
   )
 );
 
-passport.use(
-  new OIDCStrategy (
-    {
-      clientID: process.env.OAUTH_clientID,
-      clientSecret: process.env.OAUTH_clientSecret,
-      identityMetadata:`${process.env.OAUTH_AUTHORITY}${process.env.OAUTH_ID_METADATA}`,
-      responseType: "code id_token",
-      responseMode: "form_post",
-      redirectUrl: process.env.OAUTH_REDIRECTURI,
-      allowHttpForRedirectUrl :true,
-      validateIssuer :true,
-      issuer:process.env.OAUTH_ISSUER,
-      passReqToCallback :false,
-      scope:process.env.OAUTH_SCOPES.split(' '),
-    },
-    signInComplete  
-  ));
+// passport.use(
+//   new OIDCStrategy (
+//     {
+//       clientID: process.env.OAUTH_clientID,
+//       clientSecret: process.env.OAUTH_clientSecret,
+//       identityMetadata:`${process.env.OAUTH_AUTHORITY}${process.env.OAUTH_ID_METADATA}`,
+//       responseType: "code id_token",
+//       responseMode: "form_post",
+//       redirectUrl: process.env.OAUTH_REDIRECTURI,
+//       allowHttpForRedirectUrl :true,
+//       validateIssuer :true,
+//       issuer:process.env.OAUTH_ISSUER,
+//       passReqToCallback :false,
+//       scope:process.env.OAUTH_SCOPES.split(' '),
+//     },
+//     signInComplete  
+//   ));
 
-  async function signInComplete(iss, sub, profile, accessToken, refreshToken, params, done) {
+//   async function signInComplete(iss, sub, profile, accessToken, refreshToken, params, done) {
     
-    if (!profile.oid) {
-      return done(new Error("No OID found in user profile."));
-    }
+//     if (!profile.oid) {
+//       return done(new Error("No OID found in user profile."));
+//     }
   
-    try{
-      const {oid:outlookId, name, email, tid } = profile._json;
+//     try{
+//       const {oid:outlookId, name, email, tid } = profile._json;
 
-      // check the email is admin or not
-      const adminEmail = process.env.adminemail;
-      if (email == adminEmail && tid && tid == process.env.OAUTH_TID) {
-        const newUser = {
-          outlookId: outlookId,
-          name: name,
-          email: email,
-          admin: true,
-        };
-        //set user
-        // Check if database has already had this user
-        User.findOneAndUpdate({ outlookId: outlookId }, { admin: true }).then(
-          (currentUser) => {
-            // if it has, don't save
-            if (currentUser) {
-              done(null, currentUser);
-            } else {
-              // if it does not, save the new user
-              newUser.save().then((newUser) => {
-                done(null, newUser);
-              });
-            }
-          }
-        );
-      } 
-       else {
-        done(new Error("Invaild account!"));
-      }
-    } catch (err) {
-      return done(err);
-    }
-}
+//       // check the email is admin or not
+//       const adminEmail = process.env.adminemail;
+//       if (email == adminEmail && tid && tid == process.env.OAUTH_TID) {
+//         const newUser = {
+//           outlookId: outlookId,
+//           name: name,
+//           email: email,
+//           admin: true,
+//         };
+//         //set user
+//         // Check if database has already had this user
+//         User.findOneAndUpdate({ outlookId: outlookId }, { admin: true }).then(
+//           (currentUser) => {
+//             // if it has, don't save
+//             if (currentUser) {
+//               done(null, currentUser);
+//             } else {
+//               // if it does not, save the new user
+//               newUser.save().then((newUser) => {
+//                 done(null, newUser);
+//               });
+//             }
+//           }
+//         );
+//       } 
+//        else {
+//         done(new Error("Invaild account!"));
+//       }
+//     } catch (err) {
+//       return done(err);
+//     }
+// }
   
