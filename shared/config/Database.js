@@ -3,6 +3,7 @@ require('dotenv').config()
 
 const config = {
   useNewUrlParser: true,
+  useMongoClient:true,
   useUnifiedTopology: true
 };
 
