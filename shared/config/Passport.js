@@ -26,7 +26,7 @@ passport.use(
     {
       clientID: process.env.googleClientID,
       clientSecret: process.env.googleClientSecret,
-      callbackURL: "https://securecodingdojoadminteam1.herokuapp.com/auth/google/callback",
+      callbackURL: process.env.redirectURL,
     },
     (accessToken, refreshToken, profile, done) => {
       const { sub: googleId, name, email, picture, hd } = profile._json;
