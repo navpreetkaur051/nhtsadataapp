@@ -45,6 +45,9 @@ const AdminPage = () => {
     else if(vin.length < 17 && vin.match(regex[1])){
         isValidVIN = true;
     }
+    else{
+      isValidVIN = false;
+    }
 
     return isValidVIN;
   }
