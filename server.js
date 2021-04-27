@@ -1,16 +1,16 @@
 const express = require("express");
-const database = require("./shared/config/Database");
+//const database = require("./shared/config/Database");
 const morgan = require("morgan");
-const cors = require("cors");
-const cookieSession = require("cookie-session");
-const passportSetup = require("./shared/config/Passport");
-const passport = require("passport");
+//const cors = require("cors");
+//const cookieSession = require("cookie-session");
+//const passportSetup = require("./shared/config/Passport");
+//const passport = require("passport");
 const http = require("http");
 const path = require("path");
 const bodyParser = require("body-parser");
-const session = require("express-session");
-const authRoutes = require("./shared/routes/auth");
-const control = require("./shared/model/controlModel");
+//const session = require("express-session");
+const dataRoutes = require("./shared/routes/data");
+//const control = require("./shared/model/controlModel");
 require('dotenv').config()
 
 
@@ -43,13 +43,13 @@ app.all("*", function (req, res, next) {
 });
 
 // use cookie-session to encrypt user.id
-app.use(
-  cookieSession({
-    name: "session",
-    keys: [process.env.cookieKey],
-    maxAge: 3 * 60 * 1000,
-  })
-);
+// app.use(
+//   cookieSession({
+//     name: "session",
+//     keys: [process.env.cookieKey],
+//     maxAge: 3 * 60 * 1000,
+//   })
+// );
 
 // use application/json to submit data
 app.use(bodyParser.json({ limit: "5mb" }));
@@ -58,36 +58,34 @@ app.use(
     extended: true,
   })
 );
-app.use(
-  session({
-    resave: false,
-    saveUninitialized: true,
-    secret: "SECRET",
-  })
-);
+// app.use(
+//   session({
+//     resave: false,
+//     saveUninitialized: true,
+//     secret: "SECRET",
+//   })
+// );
 
-app.use(passport.initialize());
-app.use(passport.session());
 
 // log output
 app.use(morgan("tiny"));
 
 // auth router
-app.use("/auth", authRoutes);
+app.use("/data", dataRoutes);
 
 //control route
-app.post("/adminctrlset", (req, res) => {
+// app.post("/adminctrlset", (req, res) => {
   
-  let typ = req.body.dvw;
-  var myquery = { doc: "1" };
-  var newvalues = { $set: {vw:typ} };
-  control.updateOne(myquery, newvalues, (error,data) => {
-    if (error) {
-      console.log(error);
-    }
-    res.send("updated successfully");
-  });
+//   let typ = req.body.dvw;
+//   var myquery = { doc: "1" };
+//   var newvalues = { $set: {vw:typ} };
+//   control.updateOne(myquery, newvalues, (error,data) => {
+//     if (error) {
+//       console.log(error);
+//     }
+//     res.send("updated successfully");
+//   });
 
-});
+// });
 
 app.listen(PORT, () => console.log(`Server is starting at ${PORT}`));
