@@ -32,23 +32,17 @@ const AdminPage = () => {
       setNhtsaDataVehicleDetailsByVinNumber("");
   }
   const validateVin =(vin)=>{
-    let isValidVIN = true;
+    let isValidVIN = false;
     let regex = [];
     regex[0] = /^[A-Z0-9]{17}/;
     regex[1] = /^[A-Z0-9]{8}[A-Z0-9]{0,9}[*]{1}[A-Z0-9]{0,9}/;
-    if(vin===""){
-      isValidVIN = false;
-    }
-    else if(vin.length===17 && vin.match(regex[0])){
+    if(vin.length===17 && vin.match(regex[0])){
       isValidVIN = true
     }
     else if(vin.length < 17 && vin.match(regex[1])){
         isValidVIN = true;
     }
-    else{
-      isValidVIN = false;
-    }
-
+    
     return isValidVIN;
   }
   const handleFindVINVehicle = ()=>{
